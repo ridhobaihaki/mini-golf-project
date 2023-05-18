@@ -5,13 +5,21 @@ using Cinemachine;
 
 public class BallController : MonoBehaviour
 {
+    [SerializeField] Collider col;
     [SerializeField] Rigidbody rb;
     [SerializeField] float force;
     bool shoot;
-    private void Update() {
-        if(Input.GetKeyDown(KeyCode.Space))
+    
+    private void Update() 
+    {
+        if(Input.GetMouseButtonDown(0))
         {
-            shoot = true;
+            var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            
+            if(Physics.Raycast(ray, out var hitInfo) && hitInfo.collider == col)
+            {
+                    shoot = true;
+            }
         }
     }
 
