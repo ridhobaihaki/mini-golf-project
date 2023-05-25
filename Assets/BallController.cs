@@ -9,7 +9,8 @@ public class BallController : MonoBehaviour , IPointerDownHandler
     [SerializeField] Collider col;
     [SerializeField] Rigidbody rb;
     [SerializeField] float force;
-    [SerializeField] LineRenderer aimLine;
+    // [SerializeField] LineRenderer aimLine;
+    [SerializeField] Transform aimWorld;
     bool shoot;
     bool shootingMode;
     float forceFactor;
@@ -22,7 +23,8 @@ public class BallController : MonoBehaviour , IPointerDownHandler
         {
             if(Input.GetMouseButtonDown(0))
             {
-                aimLine.gameObject.SetActive(true);
+                // aimLine.gameObject.SetActive(true);
+                aimWorld.gameObject.SetActive(true);
             }
             else if(Input.GetMouseButton(0))
             {
@@ -32,10 +34,14 @@ public class BallController : MonoBehaviour , IPointerDownHandler
                 var pointerDirection = ballViewportPos - mouseViewportPos;
                 pointerDirection.z = 0;
                 
-                // draw aim
-                var positions = new Vector3[]{ballScreenPos, Input.mousePosition};
-                aimLine.SetPositions(positions);
-                
+                // // draw aim
+                // aimLine.transform.position = ballScreenPos;
+                // var positions = new Vector3[]{ballScreenPos, Input.mousePosition};
+                // aimLine.SetPositions(positions);
+                var aimDirection = Camera.main.transform.localToWorldMatrix * pointerDirection;
+                aimWorld.transform.position = this.transform.position;
+                aimWorld.transform.forward = new Vector3(aimDirection.x, 0, aimDirection.y);
+
                 // force factor
                 forceFactor = pointerDirection.magnitude * 2;
                 Debug.Log(forceFactor);
@@ -47,7 +53,8 @@ public class BallController : MonoBehaviour , IPointerDownHandler
             {
                 shoot = true;
                 shootingMode = false;
-                aimLine.gameObject.SetActive(false);
+                // aimLine.gameObject.SetActive(false);
+                aimWorld.gameObject.SetActive(false);
             }
         }
     }
