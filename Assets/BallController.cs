@@ -9,11 +9,13 @@ public class BallController : MonoBehaviour , IPointerDownHandler
     [SerializeField] Collider col;
     [SerializeField] Rigidbody rb;
     [SerializeField] float force;
-    // [SerializeField] LineRenderer aimLine;
+    [SerializeField] LineRenderer aimLine;
     [SerializeField] Transform aimWorld;
     bool shoot;
     bool shootingMode;
     float forceFactor;
+    Ray ray;
+    Plane plane;
 
     public bool ShootingMode { get => shootingMode; }
     
@@ -23,8 +25,9 @@ public class BallController : MonoBehaviour , IPointerDownHandler
         {
             if(Input.GetMouseButtonDown(0))
             {
-                // aimLine.gameObject.SetActive(true);
+                aimLine.gameObject.SetActive(true);
                 aimWorld.gameObject.SetActive(true);
+                plane = new Plane(Vector3.up,this.transform.position);
             }
             else if(Input.GetMouseButton(0))
             {
@@ -38,9 +41,11 @@ public class BallController : MonoBehaviour , IPointerDownHandler
                 // aimLine.transform.position = ballScreenPos;
                 // var positions = new Vector3[]{ballScreenPos, Input.mousePosition};
                 // aimLine.SetPositions(positions);
-                var aimDirection = Camera.main.transform.localToWorldMatrix * pointerDirection;
+
                 aimWorld.transform.position = this.transform.position;
-                aimWorld.transform.forward = new Vector3(aimDirection.x, 0, aimDirection.y);
+                ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                plane.Raycast(ray, out var distance);
+                aimWorld.forward = this.transform.position - ray.GetPoint(distance);
 
                 // force factor
                 forceFactor = pointerDirection.magnitude * 2;
