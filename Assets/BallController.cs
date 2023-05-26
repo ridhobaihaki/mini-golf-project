@@ -14,6 +14,7 @@ public class BallController : MonoBehaviour , IPointerDownHandler
     bool shoot;
     bool shootingMode;
     float forceFactor;
+    Vector3 forceDirection;
     Ray ray;
     Plane plane;
 
@@ -42,17 +43,20 @@ public class BallController : MonoBehaviour , IPointerDownHandler
                 // var positions = new Vector3[]{ballScreenPos, Input.mousePosition};
                 // aimLine.SetPositions(positions);
 
-                aimWorld.transform.position = this.transform.position;
+                // force direction
                 ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 plane.Raycast(ray, out var distance);
-                aimWorld.forward = this.transform.position - ray.GetPoint(distance);
-
+                forceDirection = (this.transform.position - ray.GetPoint(distance));
+                forceDirection.Normalize();
+                
                 // force factor
                 forceFactor = pointerDirection.magnitude * 2;
                 Debug.Log(forceFactor);
 
-                // force direction
-                Debug.Log(pointerDirection.normalized);
+                // aim visuals
+                aimWorld.transform.position = this.transform.position;
+                aimWorld.forward = forceDirection;
+                aimWorld.localScale = new Vector3(1,1,forceFactor);
             }
             else if(Input.GetMouseButtonUp(0))
             {
