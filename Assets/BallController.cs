@@ -6,13 +6,14 @@ using UnityEngine.EventSystems;
 
 public class BallController : MonoBehaviour , IPointerDownHandler
 {
-    [SerializeField] Collider col;
+
     [SerializeField] Rigidbody rb;
     [SerializeField] float force;
     [SerializeField] LineRenderer aimLine;
     [SerializeField] Transform aimWorld;
     bool shoot;
     bool shootingMode;
+
     float forceFactor;
     Vector3 forceDirection;
     Ray ray;
@@ -56,13 +57,14 @@ public class BallController : MonoBehaviour , IPointerDownHandler
                 // aim visuals
                 aimWorld.transform.position = this.transform.position;
                 aimWorld.forward = forceDirection;
-                aimWorld.localScale = new Vector3(1,1,forceFactor);
+                aimWorld.localScale = new Vector3(1, 1, 0.5f + forceFactor);
+            
             }
             else if(Input.GetMouseButtonUp(0))
             {
                 shoot = true;
                 shootingMode = false;
-                // aimLine.gameObject.SetActive(false);
+                aimLine.gameObject.SetActive(false);
                 aimWorld.gameObject.SetActive(false);
             }
         }
@@ -73,9 +75,7 @@ public class BallController : MonoBehaviour , IPointerDownHandler
         if(shoot)
         {
             shoot = false;
-            Vector3 direction = Camera.main.transform.forward;
-            direction.y = 0;
-            rb.AddForce(direction * force * forceFactor, ForceMode.Impulse);
+            rb.AddForce(forceDirection * force * forceFactor, ForceMode.Impulse);
         }
 
         if(rb.velocity.sqrMagnitude < 0.01f && rb.velocity.sqrMagnitude > 0)
@@ -91,6 +91,9 @@ public class BallController : MonoBehaviour , IPointerDownHandler
 
     void IPointerDownHandler.OnPointerDown(PointerEventData eventData)
     {
+        if(this.IsMove())
+            return;
+            
         shootingMode = true;
     }
 }
