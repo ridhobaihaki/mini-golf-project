@@ -52,7 +52,6 @@ public class BallController : MonoBehaviour , IPointerDownHandler
                 
                 // force factor
                 forceFactor = pointerDirection.magnitude * 2;
-                Debug.Log(forceFactor);
 
                 // aim visuals
                 aimWorld.transform.position = this.transform.position;
