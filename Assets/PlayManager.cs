@@ -6,11 +6,21 @@ public class PlayManager : MonoBehaviour
 {
     [SerializeField] BallController ballController;
     [SerializeField] CameraController camController;
+    
     bool isBallOutside;
     bool isBallTeleporting;
     bool isGoal;
     Vector3 lastBallPosition;
-    private void Update() {
+    private void Update() 
+    {
+        Debug.Log(
+            ballController.ShootingMode.ToString() + " " +
+            ballController.IsMove() + " " +
+            isBallOutside + " " +
+            ballController.enabled + " " +
+            isBallTeleporting + " " +
+            isGoal
+                );
 
         if(ballController.ShootingMode)
         {

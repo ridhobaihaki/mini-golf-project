@@ -78,18 +78,25 @@ public class BallController : MonoBehaviour , IPointerDownHandler
         if(shoot)
         {
             shoot = false;
-            rb.AddForce(forceDirection * force * forceFactor, ForceMode.Impulse);
+            AddForce(forceDirection * force * forceFactor, ForceMode.Impulse);
         }
 
-        if(rb.velocity.sqrMagnitude < 0.01f && rb.velocity.sqrMagnitude > 0)
+        if(rb.velocity.sqrMagnitude < 0.01f && rb.velocity.sqrMagnitude != 0)
         {
             rb.velocity= Vector3.zero;
+            rb.useGravity = false;
         }
     }
 
     public bool IsMove()
     {
         return rb.velocity != Vector3.zero;
+    }
+
+    public void AddForce(Vector3 force, ForceMode forceMode = ForceMode.Impulse)
+    {
+        rb.useGravity = true;
+        rb.AddForce(force, forceMode);
     }
 
     void IPointerDownHandler.OnPointerDown(PointerEventData eventData)
