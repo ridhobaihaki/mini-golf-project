@@ -1,3 +1,4 @@
+using UnityEngine.Events; //is this right? Looks lke it's right.
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,8 +20,14 @@ public class BallController : MonoBehaviour , IPointerDownHandler
     Ray ray;
     Plane plane;
 
+    
     public bool ShootingMode { get => shootingMode; }
     
+    int shootCount;
+    public int ShootCount { get => shootCount; }
+    
+    public UnityEvent<int> onBallShooted = new UnityEvent<int>();
+
     private void Update() 
     {
         if(shootingMode)
@@ -79,6 +86,8 @@ public class BallController : MonoBehaviour , IPointerDownHandler
         {
             shoot = false;
             AddForce(forceDirection * force * forceFactor, ForceMode.Impulse);
+            shootCount += 1;
+            onBallShooted.Invoke(shootCount);
         }
 
         if(rb.velocity.sqrMagnitude < 0.01f && rb.velocity.sqrMagnitude != 0)
