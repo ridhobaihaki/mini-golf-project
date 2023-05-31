@@ -5,13 +5,20 @@ using UnityEngine.SceneManagement;
 
 public class NextLevelButton : MonoBehaviour
 {
-    private void Start() {
+    private void OnEnable() {
         // check next scene kalau tidak ada. sembuyiin button ini
         var currentScene = SceneManager.GetActiveScene();
         int currentLevel = int.Parse(currentScene.name.Split("Level ")[1]);
         int nextLevel = currentLevel + 1;
-        var nextScene = SceneManager.GetSceneByName("Level "+nextLevel);
-        if(nextScene == null)
+        
+        var nextSceneBuildIndex = SceneUtility.GetBuildIndexByScenePath("Level "+ nextLevel);
+        Debug.Log(nextSceneBuildIndex);
+        if(nextSceneBuildIndex == -1)
             this.gameObject.SetActive(false);
+    }
+
+    public void NextLevel(string nextLevelName)
+    {
+        SceneManager.LoadScene(nextLevelName);
     }
 }
