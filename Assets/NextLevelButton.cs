@@ -17,8 +17,11 @@ public class NextLevelButton : MonoBehaviour
             this.gameObject.SetActive(false);
     }
 
-    public void NextLevel(string nextLevelName)
+    public void NextLevel()
     {
-        SceneManager.LoadScene(nextLevelName);
+        var currentScene = SceneManager.GetActiveScene();
+        int currentLevel = int.Parse(currentScene.name.Split("Level ")[1]);
+        int nextLevel = currentLevel + 1;
+        SceneManager.LoadScene("Level "+ nextLevel);    
     }
 }
