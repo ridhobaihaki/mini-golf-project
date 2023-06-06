@@ -49,7 +49,7 @@ public class PlayManager : MonoBehaviour
         camController.SetInputActive(inputActive);
     }
 
-    public void OnBallGoalEnter()
+    public void OnBallGoalEnter() //TAMBAHIN SCRIPT KECIL YG DIKASIH HANIF TD
     {
         isGoal = true;
         ballController.enabled = false;
